@@ -11,13 +11,17 @@
 typedef void (^RISimpleAction)();
 
 @interface RIButtonItem : NSObject
-{
-    NSString *label;
-    RISimpleAction action;
-}
+
 @property (retain, nonatomic) NSString *label;
 @property (copy, nonatomic) RISimpleAction action;
-+(id)item;
-+(id)itemWithLabel:(NSString *)inLabel;
+
++ (id)item;
++ (id)itemWithLabel:(NSString *)label;
++ (id)itemWithLabel:(NSString *)label action:(void (^)(void))action;
+
+- (id)init;
+- (id)initWithLabel:(NSString *)label;
+- (id)initWithLabel:(NSString *)label action:(void (^)(void))action;
+
 @end
 
