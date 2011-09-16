@@ -77,6 +77,31 @@ static NSString *RI_BUTTON_ASS_KEY = @"com.random-ideas.BUTTONS";
 	return self;
 }
 
+- (id)initWithTitle:(NSString *)title 
+			message:(NSString *)message 
+  cancelButtonTitle:(NSString *)cancelButtonTitle 
+	   cancelAction:(void (^)(void))cancelAction 
+{
+	if((self = [self initWithTitle:title message:message delegate:self cancelButtonTitle:cancelButtonTitle otherButtonTitles:nil]))
+	{
+		NSMutableArray *buttons = [NSMutableArray array];
+        
+		RIButtonItem *cancelItem = [[RIButtonItem alloc] initWithLabel:cancelButtonTitle action:cancelAction];
+		
+		[buttons addObject:cancelItem];
+
+		[cancelButtonTitle release];
+        
+        objc_setAssociatedObject(self, RI_BUTTON_ASS_KEY, buttons, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        
+        [self setDelegate:self];
+        [self retain];
+	}
+	
+	return self;
+}
+
+
 - (void)addButtonItem:(RIButtonItem *)item
 {	
     NSMutableArray *buttonsArray = objc_getAssociatedObject(self, RI_BUTTON_ASS_KEY);	
@@ -85,7 +110,7 @@ static NSString *RI_BUTTON_ASS_KEY = @"com.random-ideas.BUTTONS";
 	[buttonsArray addObject:item];	
 }
 
-- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     NSArray *buttonsArray = objc_getAssociatedObject(self, RI_BUTTON_ASS_KEY);
     RIButtonItem *item = [buttonsArray objectAtIndex:buttonIndex];
